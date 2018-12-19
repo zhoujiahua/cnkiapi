@@ -33,7 +33,7 @@ app.get('/', function (reg, res) {
 
 //图片接口数据
 app.get('/api/getImg', (req, res) => {
-	const sqlStr = 'select * from picture order by id limit 0,10'
+	const sqlStr = 'select * from news order by id limit 0,10'
 	db.query(sqlStr, (err, results) => {
 		if (err) return res.json({
 			err_code: 1,
@@ -67,9 +67,27 @@ app.get('/api/classify', (req, res) => {
 	})
 });
 
-//最新内容数据接口
+//最新资讯数据接口
 app.get('/api/contents', (req, res) => {
-	const sqlStr = 'select * from content order by CreateDate desc limit 0,20'
+	const sqlStr = 'select * from content where typeid=3  order by CreateDate desc limit 0,10'
+	db.query(sqlStr, (err, results) => {
+		if (err) return res.json({
+			err_code: 1,
+			message: '数据不存在',
+			affextedRows: 0
+		})
+		res.json({
+			err_code: 200,
+			message: results,
+			affextedRows: results.affextedRows
+		})
+		// db.end();
+	})
+});
+
+//新闻列表内容数据接口
+app.get('/api/newslist', (req, res) => {
+	const sqlStr = 'select * from content  order by CreateDate desc limit 0,20'
 	db.query(sqlStr, (err, results) => {
 		if (err) return res.json({
 			err_code: 1,
@@ -106,6 +124,26 @@ app.get('/api/getLists', (req, res) => {
 		// db.end();
 	})
 });
+
+//新闻详情接口数据
+app.get('/api/getListInfo', (req, res) => {
+	console.log(req.query)
+	const newsID = req.query.id;
+	const sqlStr = 'select * from content where id='+newsID;
+	db.query(sqlStr,(err,results)=>{
+		if(err) return res.json({
+			err_code:1,
+			message:"数据不存在",
+			affextedRows:0
+		})
+		res.json({
+			err_code:200,
+			message:results,
+			affectedRows:results.affextedRows
+		})
+	})
+
+})
 
 //添加
 app.post('/api/addcard', (req, res) => {

@@ -39,9 +39,7 @@ function del(table, id) {
             console.log('[DELETE ERROR] - ', err.message);
             return;
         }
-        console.log('--------------------------DELETE----------------------------');
         console.log('DELETE affectedRows', result.affectedRows);
-        console.log('-----------------------------------------------------------------\n\n');
     });
     connection.end();
 }
